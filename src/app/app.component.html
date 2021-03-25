@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-primary" (click)="onlyOdd = !onlyOdd">Only show odd numbers</button>
+      <br><br>
+      <ul class="list-group">
+        <!-- adding multiple structural directives do not work on same element-->
+        <div *ngIf="onlyOdd">
+          <li class="list-group-item" *ngFor="let odd of oddNumbers" [ngClass]="{odd : odd % 2 !== 0}"
+            [ngStyle]="{backgroundColor : odd % 2 !== 0 ? 'yellow':'blue'}">{{ odd }}
+          </li>
+        </div>
+        <!-- * is not something that is included in angular, 
+        * is for our use but internally it uses property binding  -->
+        <!-- <div *ngIf="!onlyOdd">
+          <li class="list-group-item" *ngFor="let even of evenNumbers" [ngClass]="{odd : even % 2 !== 0}"
+            [ngStyle]="{backgroundColor : even % 2 !== 0 ? 'yellow':'blue'}">{{ even }}
+          </li>
+        </div> -->
+        <!-- the above is same as below just it replaces * with ng-template and condition within -->
+        <!-- ng-template is not rendered itself but helps to render other elements -->
+        <!-- <ng-template [ngIf]="!onlyOdd">
+          <div>
+            <li class="list-group-item" *ngFor="let even of evenNumbers" [ngClass]="{odd : even % 2 !== 0}"
+              [ngStyle]="{backgroundColor : even % 2 !== 0 ? 'yellow':'blue'}">{{ even }}
+            </li>
+          </div>
+        </ng-template> -->
+        <!-- here custom directive is passed instead -->
+        <div *appUnless="onlyOdd">
+          <li class="list-group-item" *ngFor="let even of evenNumbers" [ngClass]="{odd : even % 2 !== 0}"
+            [ngStyle]="{backgroundColor : even % 2 !== 0 ? 'yellow':'blue'}">{{ even }}
+          </li>
+        </div>
+      </ul>
+      <!-- <ng-template [ngIf]="onlyOdd">
+        <p>Only odd</p>
+      </ng-template> -->
+      <!-- here appBasicHighlight is a custom directive and it styles the element-->
+      <p appBasicHighlight>Style me with Basic Directive!</p>
+      <!-- here defaultColor is not a property of p still angular looks to enclosed directive first and then to p -->
+      <!-- <p appBetterHighlight [defaultColor]="'blue'" [highlightColor]="'green'">Style me with Better Directive!</p> -->
+      <!-- also  appBetterHighlight is refering to directive and can refer to a property within directive as well but only 1 property -->
+      <!-- since the value passed is string, so no need to enclose within [] and '' -->
+      <p [appBetterHighlight]="'green'" defaultColor="blue">Style me with Better Directive!</p>
+      <!-- better to use instead ofmultiple if -->
+      <div [ngSwitch]="value">
+        <p *ngSwitchCase="5">Value is 5</p>
+        <p *ngSwitchCase="10">Value is 10</p>
+        <p *ngSwitchCase="100">Value is 100</p>
+        <p *ngSwitchDefault>Default Value</p>
+      </div>
+    </div>
+  </div>
+</div>
